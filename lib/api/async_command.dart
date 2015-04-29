@@ -26,7 +26,11 @@ abstract class AsyncCommand
   //
   //-----------------------------------
 	
-	AsyncCommand(this.commandName);
+	AsyncCommand(this.commandName)
+	{
+		log = new Logger(commandName);
+	}
+	
 	
   //-----------------------------------
   //
@@ -36,16 +40,12 @@ abstract class AsyncCommand
 
 	void complete(bool isSucceeded, [String message, Error error, StackTrace stackTrace]) 
 	{
-		log = new Logger(commandName);
-
 		if (isSucceeded)
-		{
 			log.fine('Command completed succesfully');
-		}
-		else
-		{
-			log.severe(message, error, stackTrace);
-		}
+		else if(!isSucceeded && error == null)
+			log.severe(message);
+		else if(!isSucceeded && error != null)
+			log.shout(message, error, stackTrace);
 		
 		_completer.complete(new CommandResult(isSucceeded, message));
 	}
