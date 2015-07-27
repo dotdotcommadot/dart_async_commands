@@ -41,7 +41,7 @@ abstract class AsyncCommand
 	void complete(bool isSucceeded, [String message, Error error, StackTrace stackTrace]) 
 	{
 		if (isSucceeded)
-			log.fine('Command completed succesfully');
+			log.info('Command completed succesfully');
 		else if(!isSucceeded && error == null)
 			log.severe(message);
 		else if(!isSucceeded && error != null)
