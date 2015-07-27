@@ -7,7 +7,7 @@ class LoginCommand extends AsyncCommand
 	
 	Future<CommandResult> execute()
 	{
-		var timer = new Timer(new Duration(seconds: 1), (){
+		new Timer(new Duration(seconds: 1), (){
   		var now = new DateTime.now();
   		print(now.toString());
   		complete(true);
@@ -34,6 +34,8 @@ void main()
 
 	
 	// Trigger Chain of Commands: When Order is Irrelevant
+	// NOTE: the body of the execution method will be run synchronously.
+	// Only the completing of the commands is asynchronously.
 	List<Future> chain = [new LoginCommand().execute(), 
 	                      new LoginCommand().execute(), 
 	                      new LoginCommand().execute()];
@@ -44,4 +46,17 @@ void main()
 		results.forEach((CommandResult result) => print(result.isSucceeded.toString()));
 		print("End of Chain of Commands: When Order is Irrelevant");
 	});
+
+
+	// Trigger Chain of Commands: When Order is Irrelevant
+	// NOTE: the body of the execution method will be run synchronously.
+	// Only the completing of the commands is asynchronously.
+	CommandRunner runner = new CommandRunner();
+
+	runner.addAll([new LoginCommand(),
+								 new LoginCommand(),
+								 new LoginCommand()]);
+
+	runner.run()
+		.then((List<CommandResult> results) => print("End of CommandRunner"));
 }
