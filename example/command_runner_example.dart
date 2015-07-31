@@ -1,31 +1,12 @@
-import 'dart:async';
 import 'package:dotdotcommadot_commands/dotdotcommadot_commands.dart';
-
-class LoginCommand extends AsyncCommand
-{
-	LoginCommand() : super("LoginCommand");
-	
-	Future<CommandResult> execute()
-	{
-		new Timer(new Duration(seconds: 1), (){
-  		var now = new DateTime.now();
-  		print(now.toString());
-  		complete(true);
-  	});
-		
-		return future;
-	}
-}
+import 'login_command.dart';
+import 'print_hello_world_hook.dart';
+import 'blocking_guard.dart';
+import 'non_blocking_guard.dart';
 
 void main()
 {
-
-	// Trigger single command
-	new LoginCommand().execute()
-		.then((result) => print("End of Single Command"));
-	
-	
-	// Trigger Chain of Commands: When Order is Relevant
+	/*// Trigger Chain of Commands: When Order is Relevant
 	new LoginCommand().execute()
 		.then((result) => result.isSucceeded? new LoginCommand().execute() : result)
 		.then((result) => result.isSucceeded? new LoginCommand().execute() : result)
@@ -45,7 +26,7 @@ void main()
 	{
 		results.forEach((CommandResult result) => print(result.isSucceeded.toString()));
 		print("End of Chain of Commands: When Order is Irrelevant");
-	});
+	});*/
 
 
 	// Trigger Chain of Commands: When Order is Irrelevant
@@ -53,10 +34,20 @@ void main()
 	// Only the completing of the commands is asynchronously.
 	CommandRunner runner = new CommandRunner();
 
-	runner.addAll([new LoginCommand(),
-								 new LoginCommand(),
-								 new LoginCommand()]);
+	runner.addAll([
+    new LoginCommand()
+      .withHooks([new PrintHelloWorldHook()])
+      .withGuards([new NonBlockingGuard()]),
+
+     new LoginCommand()
+      .withHooks([new PrintHelloWorldHook()])
+      .withGuards([new NonBlockingGuard()]),
+
+     new LoginCommand()
+      .withHooks([new PrintHelloWorldHook()])
+      .withGuards([new NonBlockingGuard()])
+  ]);
 
 	runner.run()
-		.then((List<CommandResult> results) => print("End of CommandRunner"));
+		.then((List<CommandResult> results) => results.where((R) => !R.isSucceeded).forEach((R) => print(R.message)));
 }
