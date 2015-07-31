@@ -1,24 +1,32 @@
-library command_runner;
-
-import 'dart:async';
-import 'package:logging/logging.dart';
-import 'package:dotdotcommadot_commands/impl/command_result.dart';
-import 'package:dotdotcommadot_commands/api/async_command.dart';
+part of dotdotcommadot_commands;
 
 class CommandRunner
 {
+  //-----------------------------------
+  //
+  // Public Properties
+  //
+  //-----------------------------------
+
+  final int timeOut;
+
+  AsyncCommand runningCommand;
+
+  bool get isRunning => runningCommand != null;
+
   //-----------------------------------
   //
   // Private Properties
   //
   //-----------------------------------
 
-  Logger _log                   = new Logger('CommandRunner');
-  List<AsyncCommand> _mappings  = [];
-  Completer _completer          = new Completer();
-  List<CommandResult> _results  = [];
-  bool _isRunning               = false;
-  AsyncCommand _currentCommand;
+  final Logger _log                   = new Logger('CommandRunner');
+
+  final List<AsyncCommand> _mappings  = [];
+
+  final List<CommandResult> _results  = [];
+
+  final Completer _completer          = new Completer();
 
   //-----------------------------------
   //
@@ -26,7 +34,7 @@ class CommandRunner
   //
   //-----------------------------------
 
-  CommandRunner();
+  CommandRunner({this.timeOut: 0});
 
   //-----------------------------------
   //
@@ -36,7 +44,7 @@ class CommandRunner
 
   void add(AsyncCommand command)
   {
-    if (!_isRunning)
+    if (!isRunning)
       _mappings.add(command);
     else
       throw new ConcurrentModificationError(command);
@@ -44,15 +52,14 @@ class CommandRunner
 
   void addAll(List<AsyncCommand> commands)
   {
-    if (!_isRunning)
+    if (!isRunning)
       _mappings.addAll(commands);
     else
-      throw new ConcurrentModificationError(command);
+      throw new ConcurrentModificationError();
   }
 
   Future<List<CommandResult>> run()
   {
-    _isRunning = true;
     _execute();
 
     return _completer.future;
@@ -66,9 +73,9 @@ class CommandRunner
 
   void _execute()
   {
-    _currentCommand = _mappings.removeAt(0);
+    runningCommand = _mappings.removeAt(0);
 
-    _currentCommand.execute()
+    runningCommand.run()
       .then(_onExecuted);
   }
 
@@ -78,12 +85,12 @@ class CommandRunner
 
     if (!result.isSucceeded)
     {
-      _close("Execution stopped due to error");
+      _close("Execution stopped");
     }
     else
     {
       if (_mappings.length > 0)
-        _execute();
+        new Timer(new Duration(microseconds: timeOut), () => _execute());
       else
         _close("Execution completed succesfully");
     }
@@ -91,8 +98,6 @@ class CommandRunner
 
   void _close(String message)
   {
-    _isRunning = false;
-
     _log.info(message);
     _completer.complete(_results);
   }

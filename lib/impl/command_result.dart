@@ -1,4 +1,4 @@
-library command_result;
+part of dotdotcommadot_commands;
 
 class CommandResult
 {
@@ -9,6 +9,7 @@ class CommandResult
   //-----------------------------------
 	
 	final bool isSucceeded;
+
 	final String message;
 	
   //-----------------------------------

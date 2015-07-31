@@ -1,24 +1,66 @@
-library async_command;
-
-import 'dart:async';
-import 'package:logging/logging.dart';
-import 'package:dotdotcommadot_commands/impl/command_result.dart';
+part of dotdotcommadot_commands;
 
 abstract class AsyncCommand
 {
   //-----------------------------------
   //
-  // Private Properties
+  // Public Properties
   //
   //-----------------------------------
-	
+
+	//-----------------------------------
+	// commandName
+	//-----------------------------------
+
 	final String commandName;
+
+	//-----------------------------------
+	// log
+	//-----------------------------------
 	
 	Logger log;
+
+	//-----------------------------------
+	// future
+	//-----------------------------------
+
+	Future<CommandResult> get future => _completer.future;
+
+  //-----------------------------------
+  // hooks
+  //-----------------------------------
+
+  List<Hook> hooks;
+
+  //-----------------------------------
+  // hasHooks
+  //-----------------------------------
+
+  bool get hasHooks => hooks != null && hooks.length > 0;
+
+  //-----------------------------------
+  // guards
+  //-----------------------------------
+
+  List<Guard> guards;
+
+  //-----------------------------------
+  // hasGuards
+  //-----------------------------------
+
+  bool get hasGuards => guards != null && guards.length > 0;
+
+	//-----------------------------------
+	//
+	// Private Properties
+	//
+	//-----------------------------------
+
+	//-----------------------------------
+	// _completer
+	//-----------------------------------
 	
 	final Completer _completer = new Completer();
-	
-	Future<CommandResult> get future => _completer.future;
 	
   //-----------------------------------
   //
@@ -31,14 +73,17 @@ abstract class AsyncCommand
 		log = new Logger(commandName);
 	}
 	
-	
   //-----------------------------------
   //
-  // Override Methods
+  // Public Methods
   //
   //-----------------------------------
 
-	void complete(bool isSucceeded, [String message, Error error, StackTrace stackTrace]) 
+	//-----------------------------------
+	// complete()
+	//-----------------------------------
+
+	void complete(bool isSucceeded, [String message, Error error, StackTrace stackTrace])
 	{
 		if (isSucceeded)
 			log.info('Command completed succesfully');
@@ -49,6 +94,84 @@ abstract class AsyncCommand
 		
 		_completer.complete(new CommandResult(isSucceeded, message));
 	}
+
+	//-----------------------------------
+	// addHooks()
+	//-----------------------------------
+
+	AsyncCommand withHooks(List<Hook> hooks)
+	{
+		this.hooks = hooks;
+    return this;
+	}
+
+	//-----------------------------------
+	// addGuards()
+	//-----------------------------------
+
+  AsyncCommand withGuards(List<Guard> guards)
+	{
+		this.guards = guards;
+    return this;
+	}
+
+	//-----------------------------------
+	// run()
+	//-----------------------------------
+
+	Future<CommandResult> run()
+	{
+    Completer C = new Completer();
+
+		if (_checkGuards())
+		{
+      _runHooks()
+        .then((_) => execute())
+        .then((CommandResult result) => C.complete(result));
+		}
+		else
+		{
+      C.complete(new CommandResult(false, 'Running of $commandName was prevented by guard'));
+		}
+
+    return C.future;
+  }
+
+  Future _runHooks()
+  {
+    if (hasHooks)
+    {
+      HookRunner hookRunner = new HookRunner(hooks);
+      return hookRunner.run();
+    }
+    else
+    {
+
+      return new Future.value();
+    }
+  }
+
+  bool _checkGuards()
+  {
+    bool canContinue = true;
+
+    if (hasGuards)
+    {
+      for(final Guard guard in guards)
+      {
+        canContinue = guard.execute();
+
+        if (!canContinue)
+          break;
+      };
+    }
+
+    return canContinue;
+  }
+
+	//-----------------------------------
+	// complete()
+	//-----------------------------------
 
 	Future<CommandResult> execute();
 }
