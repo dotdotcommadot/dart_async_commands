@@ -23,7 +23,7 @@ Class LoginCommand extends AsyncCommand
     final String username;
     final String password;
 
-    LoginCommand(this.username, this.password);
+    LoginCommand(this.username, this.password) : super('LoginCommand');
     
     @override
     Future<CommandResult> execute()
@@ -84,6 +84,7 @@ Or, as in our example, to update the number of login attempts.
 ```Dart
 Class UpdateLoginAttemptsHook extends Hook
 {
+    @override
     Future execute()
     {
         myApplication.loginAttempts += 1;
@@ -114,6 +115,7 @@ In our example, a good use for a guard would be to check whether the number of m
 ```Dart
 Class CheckForMaxLoginAttemptsReachedGuard extends Guard
 {
+    @override
     bool execute()
     {
         if (myApplication.loginAttempts == myApplication.maxLoginAttempts)

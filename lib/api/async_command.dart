@@ -157,7 +157,7 @@ abstract class AsyncCommand
 
     if (hasGuards)
     {
-      for(final Guard guard in guards)
+      for (final Guard guard in guards)
       {
         canContinue = guard.execute();
 
