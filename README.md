@@ -134,6 +134,10 @@ new LoginCommand('RenoRaines', 'Renegade4Ever')
     ..then((CommandResult result) => print(result.message));
 ```
 
+## Credits
+
+This project was inspired by the smart people behind the ActionScript [Robotlegs](https://github.com/robotlegs/robotlegs-framework) team.
+
 ## Info
 	
 For more info about this project, contact:
