@@ -4,12 +4,16 @@
 
 ## About
 
-dotdotcommadot Commands is a light-weight commands system.
+dotdotcommadot Commands is a light-weight commands system.  
 The main goal of commands is to organise your business logic into encapsulated chunks,   
-improving both readability and testability of your application.
+improving both readability, modularity and testability of your application.  
 Commands integrate very well with all MV* patterns.
 
 ## How To: Using AsyncCommands
+
+AsyncCommands are short-lived objects that encapsulate pieces of business logic.  
+Parameters are passed through the constructor (not through the execute() method).  
+On completion of the command (by calling the complete() method), a CommandResult object will be returned by the future.
 
 ### Creating an AsyncCommand
 
@@ -43,15 +47,24 @@ new LoginCommand('RenoRaines', 'Renegade4Ever').run()
     ..then((CommandResult result) => print(result.message));
 ```
 
+## How To: Using the CommandRunner
+
+A Commandrunner is an object that will run several commands in a chained way.
+This means that the Commandrunner will wait for the previous AsyncCommand to complete before starting to execute the next AsyncCommand.
+This is in contrast with the default Dart Futures API ```Future.wait(List<Futures> futures);```.
+Here all async methods will run immediately, and the ```wait``` method will wait untill all methods are completed as batch,   
+instead of waiting for each method to be completed before starting to run the next one.
+
+
 ### Chaining AsyncCommand with the CommandRunner
 
 ```Dart
 CommandRunner runner = new CommandRunner();
 runner.addAll(
-    [
-        new LoginCommand('RenoRaines', 'Renegade4Ever'),
-        new UpdateCookiesCommand()
-    ]);
+[
+    new LoginCommand('RenoRaines', 'Renegade4Ever'),
+    new UpdateCookiesCommand()
+]);
 
 runner.run()
     ..then((List<CommandResult> results) => results.forEach((result) => print(result.message)));
@@ -93,7 +106,7 @@ new LoginCommand('RenoRaines', 'Renegade4Ever')
 ## How To: Using Guards
 
 Guards are objects that will be executed __before__ the hooks and the related command is being executed.
-The purpose of guards is to check for certain conditions, and return a flag allowing the command either to run, or not to run.
+The purpose of a guard is to check for certain conditions, and return a flag allowing the command either to run or not.
 In our example, a good use for a guard would be to check whether the number of max login attempts is reached.
 
 ### Creating a Guard
