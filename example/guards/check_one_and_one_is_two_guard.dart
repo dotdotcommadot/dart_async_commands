@@ -1,8 +1,8 @@
-library non_blocking_guard;
+library check_one_and_one_is_two_guard;
 
 import 'package:dotdotcommadot_commands/dotdotcommadot_commands.dart';
 
-class NonBlockingGuard extends Guard
+class CheckOneAndOneIsTwoGuard extends Guard
 {
   @override
   bool execute()
