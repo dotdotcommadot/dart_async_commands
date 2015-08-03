@@ -73,11 +73,11 @@ runner.run()
 ## How To: Using Hooks
 
 Hooks are objects that will be executed right before the command they are related to is being executed.  
-Their main purpose is to perform tasks that are related to the command, but you might not regard as business logic.  
-Seperating the actions performed by a hook from their related command to will often times clean up your unit tests, 
+Their main purpose is to perform tasks that are related to the command, but you don't regard as being business logic.  
+Separating the actions performed by a hook from their related command will often times clean up your unit tests, 
 since you will only be testing what is really relevant for that command.  
-A good use for a hook would be to update a progressbar, or reinitialize a list of items.  
-Or, as in our example, to update the number of login attempts when you don't want the LoginCommand to have a dependency on the ```myApplcation``` object.
+A good use for a hook would be to update a progressbar, or to reinitialize a list of items.  
+Or, as in our example, to update the number of login attempts.
 
 ### Creating a Hook
 
@@ -105,7 +105,7 @@ new LoginCommand('RenoRaines', 'Renegade4Ever')
 
 ## How To: Using Guards
 
-Guards are objects that will be executed __before__ the hooks and the related command is being executed.
+Guards are objects that will be executed *before* the hooks and the related command is being executed.
 The purpose of a guard is to check for certain conditions, and return a flag allowing the command either to run or not.
 In our example, a good use for a guard would be to check whether the number of max login attempts is reached.
 
