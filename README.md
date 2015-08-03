@@ -51,8 +51,8 @@ new LoginCommand('RenoRaines', 'Renegade4Ever').run()
 
 A Commandrunner is an object that will run several commands in a chained way.
 This means that the Commandrunner will wait for the previous AsyncCommand to complete before starting to execute the next AsyncCommand.
-This is in contrast with the default Dart Futures API ```Future.wait(List<Futures> futures);```.
-Here all async methods will run immediately, and the ```wait``` method will wait untill all methods are completed as batch,   
+This is in contrast with the default Dart Futures API ```Future.wait(List<Futures> futures);```.  
+Here all async methods will run instantly, and the ```wait``` method will wait untill all methods are completed as batch,   
 instead of waiting for each method to be completed before starting to run the next one.
 
 
