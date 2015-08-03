@@ -41,11 +41,11 @@ void main()
 
      new LoginCommand()
       .withHooks([new PrintHelloWorldHook()])
-      .withGuards([new NonBlockingGuard()]),
+      .withGuards([new BlockingGuard()]),
 
      new LoginCommand()
       .withHooks([new PrintHelloWorldHook()])
-      .withGuards([new NonBlockingGuard()])
+      .withGuards([new BlockingGuard()])
   ]);
 
 	runner.run()
