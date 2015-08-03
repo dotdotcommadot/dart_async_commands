@@ -14,6 +14,9 @@ void main()
 
 	// 3. Example with Hook and Blocking Guard
 	runExampleWithHookAndBlockingGuard();
+
+	// 4. Example with For loop
+	runExampleWithForLoop();
 }
 
 void runBasicExample()
@@ -64,6 +67,23 @@ void runExampleWithHookAndBlockingGuard()
 			.withHooks([new PrintHelloWorldHook()])
 			.withGuards([new CheckOneAndOneIsTwoGuard()])
 	]);
+
+	runner.run()
+		.then((List<CommandResult> results) => results.where((R) => !R.isSucceeded).forEach((R) => print(R.message)));
+}
+
+void runExampleWithForLoop()
+{
+	CommandRunner runner = new CommandRunner();
+
+	for (int i = 0; i < 3; i++)
+	{
+		runner.add(
+			new LoginCommand()
+			.withHooks([new PrintHelloWorldHook()])
+			.withGuards([new CheckOneAndOneIsTwoGuard()])
+		);
+	}
 
 	runner.run()
 		.then((List<CommandResult> results) => results.where((R) => !R.isSucceeded).forEach((R) => print(R.message)));
