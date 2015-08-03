@@ -56,7 +56,7 @@ Here all async methods will run instantly, and the ```wait``` method will wait u
 instead of waiting for each method to be completed before starting to run the next one.
 
 
-### Chaining AsyncCommand with the CommandRunner
+### Chaining AsyncCommands with the CommandRunner
 
 ```Dart
 CommandRunner runner = new CommandRunner();
