@@ -1,4 +1,4 @@
-import 'package:dotdotcommadot_commands/dotdotcommadot_commands.dart';
+import 'package:async_commands/async_commands.dart';
 import 'commands/login_command.dart';
 import 'hooks/print_hello_world_hook.dart';
 import 'guards/check_one_and_one_is_two_guard.dart';

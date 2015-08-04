@@ -1,4 +1,4 @@
-library dotdotcommadot_commands;
+library async_commands;
 
 import 'dart:async';
 import 'package:logging/logging.dart';

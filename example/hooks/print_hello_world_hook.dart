@@ -1,7 +1,7 @@
 library print_hello_world_hook;
 
 import 'dart:async';
-import 'package:dotdotcommadot_commands/dotdotcommadot_commands.dart';
+import 'package:async_commands/async_commands.dart';
 
 class PrintHelloWorldHook extends Hook
 {

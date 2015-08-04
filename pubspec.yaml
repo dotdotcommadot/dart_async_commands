@@ -1,9 +1,9 @@
-name: dotdotcommadot_commands
+name: async_commands
 version: 0.2.1
-description: AsyncCommands for Google Dart
+description: Asynchronous Commands for Google Dart
+author: Hans Van den Keybus <hans@dotdotcommadot.com>
 environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
-  browser: any
   logging: '0.10.0'
   test: any

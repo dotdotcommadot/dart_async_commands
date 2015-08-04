@@ -1,4 +1,4 @@
-part of dotdotcommadot_commands;
+part of async_commands;
 
 class HookRunner
 {

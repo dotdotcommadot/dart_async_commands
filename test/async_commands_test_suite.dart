@@ -2,7 +2,7 @@ library async_commands_test_suite;
 
 import 'dart:async';
 import 'package:test/test.dart';
-import 'package:dotdotcommadot_commands/dotdotcommadot_commands.dart';
+import 'package:async_commands/async_commands.dart';
 
 part 'api/blocking_guard.dart';
 part 'api/increment_iterations_hook.dart';

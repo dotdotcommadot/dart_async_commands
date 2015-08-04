@@ -1,6 +1,6 @@
 library login_command;
 
-import 'package:dotdotcommadot_commands/dotdotcommadot_commands.dart';
+import 'package:async_commands/async_commands.dart';
 import 'dart:async';
 
 class LoginCommand extends AsyncCommand
