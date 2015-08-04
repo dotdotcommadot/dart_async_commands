@@ -1,5 +1,3 @@
-# AsyncCommands
-
 ## About
 
 AsyncCommands is a light-weight commands system.  
