@@ -7,16 +7,16 @@ class CommandResult
   // Public Properties
   //
   //-----------------------------------
-	
-	final bool isSucceeded;
 
-	final String message;
-	
+  final bool isSucceeded;
+
+  final String message;
+
   //-----------------------------------
   //
   // Constructor
   //
   //-----------------------------------
-	
-	CommandResult(this.isSucceeded, [this.message]);
+
+  CommandResult(this.isSucceeded, [this.message]);
 }

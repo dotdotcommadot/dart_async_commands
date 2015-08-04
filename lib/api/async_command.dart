@@ -8,23 +8,23 @@ abstract class AsyncCommand
   //
   //-----------------------------------
 
-	//-----------------------------------
-	// commandName
-	//-----------------------------------
+  //-----------------------------------
+  // commandName
+  //-----------------------------------
 
-	final String commandName;
+  final String commandName;
 
-	//-----------------------------------
-	// log
-	//-----------------------------------
-	
-	Logger log;
+  //-----------------------------------
+  // log
+  //-----------------------------------
 
-	//-----------------------------------
-	// future
-	//-----------------------------------
+  Logger log;
 
-	Future<CommandResult> get future => _completer.future;
+  //-----------------------------------
+  // future
+  //-----------------------------------
+
+  Future<CommandResult> get future => _completer.future;
 
   //-----------------------------------
   // hooks
@@ -50,89 +50,89 @@ abstract class AsyncCommand
 
   bool get hasGuards => guards != null && guards.length > 0;
 
-	//-----------------------------------
-	//
-	// Private Properties
-	//
-	//-----------------------------------
+  //-----------------------------------
+  //
+  // Private Properties
+  //
+  //-----------------------------------
 
-	//-----------------------------------
-	// _completer
-	//-----------------------------------
-	
-	final Completer _completer = new Completer();
-	
+  //-----------------------------------
+  // _completer
+  //-----------------------------------
+
+  final Completer _completer = new Completer();
+
   //-----------------------------------
   //
   // Constructor
   //
   //-----------------------------------
-	
-	AsyncCommand(this.commandName)
-	{
-		log = new Logger(commandName);
-	}
-	
+
+  AsyncCommand(this.commandName)
+  {
+    log = new Logger(commandName);
+  }
+
   //-----------------------------------
   //
   // Public Methods
   //
   //-----------------------------------
 
-	//-----------------------------------
-	// complete()
-	//-----------------------------------
+  //-----------------------------------
+  // complete()
+  //-----------------------------------
 
-	void complete(bool isSucceeded, [String message, Error error, StackTrace stackTrace])
-	{
-		if (isSucceeded)
-			log.info('Command completed succesfully');
-		else if(!isSucceeded && error == null)
-			log.severe(message);
-		else if(!isSucceeded && error != null)
-			log.shout(message, error, stackTrace);
-		
-		_completer.complete(new CommandResult(isSucceeded, message));
-	}
+  void complete(bool isSucceeded, [String message, Error error, StackTrace stackTrace])
+  {
+    if (isSucceeded)
+      log.info('Command completed succesfully');
+    else if(!isSucceeded && error == null)
+      log.severe(message);
+    else if(!isSucceeded && error != null)
+      log.shout(message, error, stackTrace);
 
-	//-----------------------------------
-	// addHooks()
-	//-----------------------------------
+    _completer.complete(new CommandResult(isSucceeded, message));
+  }
 
-	AsyncCommand withHooks(List<Hook> hooks)
-	{
-		this.hooks = hooks;
+  //-----------------------------------
+  // addHooks()
+  //-----------------------------------
+
+  AsyncCommand withHooks(List<Hook> hooks)
+  {
+    this.hooks = hooks;
     return this;
-	}
+  }
 
-	//-----------------------------------
-	// addGuards()
-	//-----------------------------------
+  //-----------------------------------
+  // addGuards()
+  //-----------------------------------
 
   AsyncCommand withGuards(List<Guard> guards)
-	{
-		this.guards = guards;
+  {
+    this.guards = guards;
     return this;
-	}
+  }
 
-	//-----------------------------------
-	// run()
-	//-----------------------------------
+  //-----------------------------------
+  // run()
+  //-----------------------------------
 
-	Future<CommandResult> run()
-	{
+  Future<CommandResult> run()
+  {
     Completer C = new Completer();
 
-		if (_checkGuards())
-		{
+    if (_checkGuards())
+    {
       _runHooks()
         .then((_) => execute())
         .then((CommandResult result) => C.complete(result));
-		}
-		else
-		{
+    }
+    else
+    {
       C.complete(new CommandResult(false, 'Running of $commandName was prevented by guard'));
-		}
+    }
 
     return C.future;
   }
@@ -169,9 +169,9 @@ abstract class AsyncCommand
     return canContinue;
   }
 
-	//-----------------------------------
-	// complete()
-	//-----------------------------------
+  //-----------------------------------
+  // complete()
+  //-----------------------------------
 
-	Future<CommandResult> execute();
+  Future<CommandResult> execute();
 }
