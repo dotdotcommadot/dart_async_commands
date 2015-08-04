@@ -1,10 +1,10 @@
-# dotdotcommadot Commands
+# AsyncCommands
 
 ###### Version: 0.2.1
 
 ## About
 
-dotdotcommadot Commands is a light-weight commands system.  
+AsyncCommands is a light-weight commands system.  
 The main goal of commands is to organise your business logic into encapsulated chunks,   
 improving both readability, modularity and testability of your application.  
 Commands integrate very well with all MV* patterns.
