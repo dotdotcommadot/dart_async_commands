@@ -1,7 +1,5 @@
 # AsyncCommands
 
-###### Version: 0.2.1
-
 ## About
 
 AsyncCommands is a light-weight commands system.  
