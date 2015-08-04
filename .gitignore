@@ -5,6 +5,7 @@ packages/
 *.js.deps
 *.js.map
 *.dart.js
+*.pub/
 out.js
 out.js.map
 out
@@ -37,3 +38,6 @@ packages/
 
 # Include when developing application packages.
 pubspec.lock
+
+*.iml
+*.stackdump
