@@ -2,6 +2,7 @@ name: async_commands
 version: 0.2.1
 description: Asynchronous Commands for Google Dart
 author: Hans Van den Keybus <hans@dotdotcommadot.com>
+homepage: https://github.com/dotdotcommadot/dart_async_commands
 environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
