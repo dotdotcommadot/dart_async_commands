@@ -71,6 +71,20 @@ CommandRunnerTest()
       });
   });
 
+  test('Running Failing Command With IgnoreFailedStatus Should Not Block Execution', ()
+  {
+    new CommandRunner(ignoreFailedStatus: true)
+      ..addAll([new TestCommandA(false), new TestCommandA(true)])
+      ..run()
+      .then((List<CommandResult> commandResults)
+      {
+        expect(commandResults.length, equals(2));
+
+        expect(commandResults.first.isSucceeded, false);
+        expect(commandResults.last.isSucceeded, true);
+      });
+  });
+
   test('Completing Command With Message Should Return Message in Result', ()
   {
     new CommandRunner()

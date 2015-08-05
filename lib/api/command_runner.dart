@@ -8,8 +8,6 @@ class CommandRunner
   //
   //-----------------------------------
 
-  final int timeOut;
-
   AsyncCommand runningCommand;
 
   bool get isRunning => runningCommand != null;
@@ -28,13 +26,15 @@ class CommandRunner
 
   final Completer _completer          = new Completer();
 
+  final ignoreFailedStatus;
+
   //-----------------------------------
   //
   // Constructor
   //
   //-----------------------------------
 
-  CommandRunner({this.timeOut: 0});
+  CommandRunner({this.ignoreFailedStatus: false});
 
   //-----------------------------------
   //
@@ -83,14 +83,14 @@ class CommandRunner
   {
     _results.add(result);
 
-    if (!result.isSucceeded)
+    if (!result.isSucceeded && !ignoreFailedStatus)
     {
       _close("Execution stopped");
     }
     else
     {
       if (_mappings.length > 0)
-        new Timer(new Duration(microseconds: timeOut), () => _execute());
+        _execute();
       else
         _close("Execution completed succesfully");
     }
