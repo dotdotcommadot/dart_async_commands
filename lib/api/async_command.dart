@@ -96,7 +96,7 @@ abstract class AsyncCommand
   }
 
   //-----------------------------------
-  // addHooks()
+  // withHooks()
   //-----------------------------------
 
   AsyncCommand withHooks(List<Hook> hooks)
@@ -106,7 +106,7 @@ abstract class AsyncCommand
   }
 
   //-----------------------------------
-  // addGuards()
+  // withGuards()
   //-----------------------------------
 
   AsyncCommand withGuards(List<Guard> guards)
@@ -122,8 +122,9 @@ abstract class AsyncCommand
   Future<CommandResult> run()
   {
     Completer C = new Completer();
+    CommandResult guardsResult = _checkGuards();
 
-    if (_checkGuards())
+    if (guardsResult.isSucceeded)
     {
       _runHooks()
         .then((_) => execute())
@@ -131,11 +132,28 @@ abstract class AsyncCommand
     }
     else
     {
-      C.complete(new CommandResult(false, 'Running of $commandName was prevented by guard'));
+      if (guardsResult.message == null)
+        C.complete(new CommandResult(false, 'Running of $commandName was prevented by guard'));
+      else
+        C.complete(guardsResult);
     }
 
     return C.future;
   }
+
+  //-----------------------------------
+  //
+  // Override Methods
+  //
+  //-----------------------------------
+
+  Future<CommandResult> execute();
+
+  //-----------------------------------
+  //
+  // Private Methods
+  //
+  //-----------------------------------
 
   Future _runHooks()
   {
@@ -146,14 +164,14 @@ abstract class AsyncCommand
     }
     else
     {
-
       return new Future.value();
     }
   }
 
-  bool _checkGuards()
+  CommandResult _checkGuards()
   {
     bool canContinue = true;
+    String reasonOfFailure;
 
     if (hasGuards)
     {
@@ -162,16 +180,13 @@ abstract class AsyncCommand
         canContinue = guard.execute();
 
         if (!canContinue)
+        {
+          reasonOfFailure = guard.reasonOfFailure;
           break;
+        }
       };
     }
 
-    return canContinue;
+    return new CommandResult(canContinue, reasonOfFailure);
   }
-
-  //-----------------------------------
-  // complete()
-  //-----------------------------------
-
-  Future<CommandResult> execute();
 }

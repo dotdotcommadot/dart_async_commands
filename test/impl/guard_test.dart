@@ -75,4 +75,15 @@ GuardTest()
       });
     });
   });
+
+  test('Exiting Blocking Guard With reasonOfFailure Should Return reasonOfFailure', ()
+  {
+    new TestCommandA(true)
+    .withGuards([new BlockingGuard()])
+    .run()
+    .then((CommandResult commandResult) {
+      expect(commandResult.isSucceeded, equals(false));
+      expect(commandResult.message, equals("I'm supposed to block things"));
+    });
+  });
 }
